@@ -1,7 +1,7 @@
-const todoValue = document.querySelector('.todoText');
-const todoAlert = document.querySelector('Alert');
-const listItems = document.querySelector('list-items');
-const addUpdate = document.querySelector('AddUpdateClick');
+const todoValue = document.getElementById('todoText');
+const todoAlert = document.getElementById('Alert');
+const listItems = document.getElementById('list-items');
+const addUpdate = document.getElementById('AddUpdateClick');
 
 let todo = JSON.parse(localStorage.getItem("todo-list"));
 if (!todo) {
@@ -48,3 +48,31 @@ function CreateToDoItems() {
     todoValue.value = "";
     setAlertMessage("To Do Item Added Successfully");
 }
+
+// addUpdate.addEventListener('click', CreateToDoItems);
+
+function ReadToDoItems() {
+    todo.forEach((element) => {
+        let li = document.createElement('li');
+        let style = "";
+        if (element.status) {
+            style = "text-decoration: line-through";
+        }
+        const todoItems = `
+            <div title = "Hit Double Click and Complete" ondblclick = "CompletedToDoItems(this)" style = "${style}">
+                ${element.item} 
+                ${style === "" ? "" : `<img class = "todo-controls" src="/images/check.png" />`
+            }
+            </div>
+            <div>
+                ${style === "" ? `<img class = "edit todo-controls" onclick = "UpdateToDoItems(this)" src = "/images/edit.png" />`
+                : ""
+            }
+                <img class = "delete todo-controls" onclick = "DeleteToDoItems(this)" src = "/images/bin.png" />
+            </div>`;
+            li.innerHTML = todoItems;
+            listItems.appendChild(li);
+    });
+}
+
+ReadToDoItems();
