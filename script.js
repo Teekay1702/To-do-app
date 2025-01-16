@@ -76,3 +76,40 @@ function ReadToDoItems() {
 }
 
 ReadToDoItems();
+
+function UpdateToDoItems(e) {
+    if (e.parentElement.parentElement.querySelector("div").style.textDecoration === "") {
+        todoValue.value = e.parentElement.parentElement.querySelector("div").innerText;
+        updateText = e.parentElement.parentElement.querySelector("div").innerText;
+        addUpdate.setAttribute("onclick", "UpdateToDoItems()");
+        addUpdate.setAttribute("src", "/images/update.png");
+        todoValue.focus();
+    }
+}
+
+function UpdateOnSelectionItems() {
+    let IsPresent = false;
+    todo.forEach((element) => {
+        if (element.item == todoValue.value) {
+            IsPresent = true;
+        }
+    });
+
+    if (IsPresent) {
+        setAlertMessage("This item is already present in the list");
+        return;
+    }
+
+    todo.forEach((element) => {
+        if (element.item == updateText.innerText.trim) {
+            element.item = todoValue.value;
+        }
+    });
+    setLocalStorage();
+
+    updateText.innerText = todoValue.value;
+    addUpdate.setAttribute("onclick", "CreateToDoItems()");
+    addUpdate.setAttribute("src", "/images/plus.png");
+    todoValue.value = "";
+    setAlertMessage("To Do Item Updated Successfully");
+}
