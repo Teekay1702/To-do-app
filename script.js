@@ -8,6 +8,11 @@ if (!todo) {
     todo = [];
 }
 
+function setLocalStorage() {
+    localStorage.setItem("todo", JSON.stringify(todo));
+    console.log("Saved", JSON.parse(localStorage.getItem("todo-list")));
+}
+
 function CreateToDoItems() {
     if (todoValue.value === "") {
         todoAlert.innerText = "Please enter a todo item";
@@ -49,7 +54,7 @@ function CreateToDoItems() {
     setAlertMessage("To Do Item Added Successfully");
 }
 
-// addUpdate.addEventListener('click', CreateToDoItems);
+addUpdate.addEventListener('click', CreateToDoItems);
 
 function ReadToDoItems() {
     todo.forEach((element) => {
@@ -154,10 +159,6 @@ function CompletedToDoItems(e) {
 
         setAlertMessage("To Do Item Completed Successfully");
     }
-}
-
-function setLocalStorage() {
-    localStorage.setItem("todo", JSON.stringify(todo));
 }
 
 function setAlertMessage(message) {
