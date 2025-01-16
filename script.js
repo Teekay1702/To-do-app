@@ -159,3 +159,11 @@ function CompletedToDoItems(e) {
 function setLocalStorage() {
     localStorage.setItem("todo", JSON.stringify(todo));
 }
+
+function setAlertMessage(message) {
+    todoAlert.removeAttribute("class");
+    todoAlert.innerText = message;
+    setTimeout(() => {
+        todoAlert.classList.add("toggleMe");
+    }, 1000);
+}
