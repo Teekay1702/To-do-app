@@ -80,8 +80,8 @@ ReadToDoItems();
 function UpdateToDoItems(e) {
     if (e.parentElement.parentElement.querySelector("div").style.textDecoration === "") {
         todoValue.value = e.parentElement.parentElement.querySelector("div").innerText;
-        updateText = e.parentElement.parentElement.querySelector("div").innerText;
-        addUpdate.setAttribute("onclick", "UpdateToDoItems()");
+        updateText = e.parentElement.parentElement.querySelector("div");
+        addUpdate.setAttribute("onclick", "UpdateOnSelectionItems()");
         addUpdate.setAttribute("src", "/images/update.png");
         todoValue.focus();
     }
@@ -90,7 +90,7 @@ function UpdateToDoItems(e) {
 function UpdateOnSelectionItems() {
     let IsPresent = false;
     todo.forEach((element) => {
-        if (element.item == todoValue.value) {
+        if (element.item == todoValue.value.trim()) {
             IsPresent = true;
         }
     });
@@ -101,13 +101,13 @@ function UpdateOnSelectionItems() {
     }
 
     todo.forEach((element) => {
-        if (element.item == updateText.innerText.trim) {
-            element.item = todoValue.value;
+        if (element.item === updateText.innerText.trim()) {
+            element.item = todoValue.value.trim();
         }
     });
     setLocalStorage();
 
-    updateText.innerText = todoValue.value;
+    updateText.innerText = todoValue.value.trim();
     addUpdate.setAttribute("onclick", "CreateToDoItems()");
     addUpdate.setAttribute("src", "/images/plus.png");
     todoValue.value = "";
