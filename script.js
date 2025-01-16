@@ -134,3 +134,28 @@ function DeleteToDoItems(e) {
         setLocalStorage();
     }
 }
+
+function CompletedToDoItems(e) {
+    if (e.parentElement.querySelector("div").style.textDecoration === "") {
+        const img = document.createElement("img");
+        img.src = "/images/check.png";
+        img.className = "todo-controls";
+        e.parentElement.querySelector("div").style.textDecoration = "line-through";
+        e.parentElement.querySelector("div").appendChild(img);
+        e.parentElement.querySelector("img.edit").remove();
+
+        todo.forEach((element) => {
+            if (e.parentElement.querySelector("div").innerText.trim() == element.item) {
+                element.status = true;
+            }
+        });
+
+        setLocalStorage();
+
+        setAlertMessage("To Do Item Completed Successfully");
+    }
+}
+
+function setLocalStorage() {
+    localStorage.setItem("todo", JSON.stringify(todo));
+}
