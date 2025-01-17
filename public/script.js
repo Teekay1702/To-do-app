@@ -36,8 +36,8 @@ function CreateToDoItems() {
                 ${todoValue.value}
             </div>
             <div>
-                <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="/public/images/edit.png" />
-                <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="/public/images/bin.png" />
+                <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />
+                <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/bin.png" />
             </div>
             `;
         li.innerHTML = todoItems;
@@ -66,11 +66,11 @@ function ReadToDoItems() {
         const todoItems = `
             <div title="Hit Double Click and Complete" ondblclick="CompletedToDoItems(this)" style="${style}">
                 ${element.item} 
-                ${style === "" ? "" : `<img class="todo-controls" src="/public/images/check.png" />`}
+                ${style === "" ? "" : `<img class="todo-controls" src="images/check.png" />`}
             </div>
             <div>
-                ${style === "" ? `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="/public/images/edit.png" />` : ""}
-                <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="/public/images/bin.png" />
+                ${style === "" ? `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />` : ""}
+                <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/bin.png" />
             </div>`;
         li.innerHTML = todoItems;
         listItems.appendChild(li);
@@ -84,7 +84,7 @@ function UpdateToDoItems(e) {
         todoValue.value = e.parentElement.parentElement.querySelector("div").innerText;
         updateText = e.parentElement.parentElement.querySelector("div");
         addUpdate.setAttribute("onclick", "UpdateOnSelectionItems()");
-        addUpdate.setAttribute("src", "/public/images/update.png");
+        addUpdate.setAttribute("src", "images/update.png");
         todoValue.focus();
     }
 }
@@ -111,7 +111,7 @@ function UpdateOnSelectionItems() {
 
     updateText.innerText = todoValue.value.trim();
     addUpdate.setAttribute("onclick", "CreateToDoItems()");
-    addUpdate.setAttribute("src", "/public/images/plus.png");
+    addUpdate.setAttribute("src", "images/plus.png");
     todoValue.value = "";
     setAlertMessage("To Do Item Updated Successfully");
 }
@@ -140,7 +140,7 @@ function DeleteToDoItems(e) {
 function CompletedToDoItems(e) {
     if (e.parentElement.querySelector("div").style.textDecoration === "") {
         const img = document.createElement("img");
-        img.src = "/public/images/check.png";
+        img.src = "images/check.png";
         img.className = "todo-controls";
         e.parentElement.querySelector("div").style.textDecoration = "line-through";
         e.parentElement.querySelector("div").appendChild(img);
