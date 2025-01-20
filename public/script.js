@@ -122,28 +122,38 @@ function UpdateOnSelectionItems() {
 
 
 function DeleteToDoItems(e) {
-    let deleteValue = e.parentElement.parentElement.querySelector("div").innerText;
+    const deleteValue = e.parentElement.parentElement.querySelector("span").innerText.trim();
 
     if (confirm(`Are you sure you want to delete this item: "${deleteValue}"?`)) {
+        // Visually mark the item for deletion
         e.parentElement.parentElement.setAttribute("class", "deleted-item");
-        todoValue.focus();
 
-        todo.forEach((element, index) => {
-            if (element.item == deleteValue) {
-                todo.splice(index, 1);
-            }
-        });
+        // Remove the item from local storage and the DOM
+        todo = todo.filter(element => element.item !== deleteValue);
+        setLocalStorage();
 
         setTimeout(() => {
             e.parentElement.parentElement.remove();
+            updateCounters(); // Update counters after DOM changes
         }, 1000);
 
-        setLocalStorage();
-        updateCounters();
-
-        setAlertMessage("To Do Item Deleted Successfully");
+        // Send a delete request to the server
+        fetch('/todos', {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ item: deleteValue })
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Server Response:', data);
+            setAlertMessage("To Do Item Deleted Successfully");
+        })
+        .catch(error => {
+            console.error('Error deleting item on server:', error);
+        });
     }
 }
+
 
 function CompletedToDoItems(e) {
     const todoItemDiv = e.parentElement;
