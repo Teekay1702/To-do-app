@@ -13,6 +13,16 @@ function setLocalStorage() {
     console.log("Saved", JSON.parse(localStorage.getItem("todo-list")));
 }
 
+todoValue.addEventListener("keydown", function (event) {
+    if (event.key === "Enter") {
+        if(addUpdate.getAttribute("onclick") === "CreateToDoItems()") {
+            CreateToDoItems();
+        } else if(addUpdate.getAttribute("onclick") === "UpdateOnSelectionItems()") {
+            UpdateOnSelectionItems();
+        }
+    }
+});
+
 function CreateToDoItems() {
     if (todoValue.value === "") {
         todoAlert.innerText = "Please enter a todo item";
@@ -33,7 +43,7 @@ function CreateToDoItems() {
         let li = document.createElement('li');
         const todoItems = `
             <div>
-                <img class="check todo-controls" onclick="CompletedToDoItems(this)" src="images/check_empty.png" />
+                <img class="check todo-controls" onclick="CompletedToDoItems(this)" src="images/square.png" />
                 <span>${todoValue.value}</span>
             </div>
             <div>
@@ -125,19 +135,16 @@ function DeleteToDoItems(e) {
     const deleteValue = e.parentElement.parentElement.querySelector("span").innerText.trim();
 
     if (confirm(`Are you sure you want to delete this item: "${deleteValue}"?`)) {
-        // Visually mark the item for deletion
         e.parentElement.parentElement.setAttribute("class", "deleted-item");
 
-        // Remove the item from local storage and the DOM
         todo = todo.filter(element => element.item !== deleteValue);
         setLocalStorage();
 
         setTimeout(() => {
             e.parentElement.parentElement.remove();
-            updateCounters(); // Update counters after DOM changes
+            updateCounters();
         }, 1000);
 
-        // Send a delete request to the server
         fetch('/todos', {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' },
@@ -172,7 +179,6 @@ function CompletedToDoItems(e) {
 
         const editHTML = `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />`;
         todoItemDiv.nextElementSibling.innerHTML += editHTML;
-        setAlertMessage("To Do Item Unmarked as Completed");
     } else {
         todoTextSpan.style.textDecoration = "line-through";
         e.src = "images/check.png";

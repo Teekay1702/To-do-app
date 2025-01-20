@@ -5,12 +5,10 @@ const bodyParser = require('body-parser');
 const app = express();
 const port = 3000;
 
-// Middleware to parse JSON requests
 app.use(bodyParser.json());
 
 app.use(express.static('public'));
 
-// In-memory storage for simplicity (replace with a database in production)
 let todos = [];
 
 app.get('/todos', (req, res) => {
