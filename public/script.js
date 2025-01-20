@@ -13,7 +13,9 @@ function setLocalStorage() {
     console.log("Saved", JSON.parse(localStorage.getItem("todo-list")));
 }
 
-todoValue.addEventListener("keydown", function (event) {
+addUpdate.setAttribute("onclick", "CreateToDoItems()");
+
+todoValue.addEventListener("keyup", (event) => {
     if (event.key === "Enter") {
         if(addUpdate.getAttribute("onclick") === "CreateToDoItems()") {
             CreateToDoItems();
