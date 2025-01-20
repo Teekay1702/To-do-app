@@ -24,5 +24,5 @@ Follow these steps to get WeatherApp running locally:
 
 1. Clone the repository:
    ```bash
-   git clone https://github.com/Teekay1702/Web-Portfolio
+   git clone https://github.com/Teekay1702/To-do-app
 
