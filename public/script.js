@@ -32,20 +32,17 @@ function CreateToDoItems() {
 
         let li = document.createElement('li');
         const todoItems = `
-            <div title="Hit Double Click and Complete" ondblclick="CompletedToDoItems(this)">
-                ${todoValue.value}
+            <div>
+                <img class="check todo-controls" onclick="CompletedToDoItems(this)" src="images/check_empty.png" />
+                <span>${todoValue.value}</span>
             </div>
             <div>
                 <img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />
                 <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/bin.png" />
-            </div>
-            `;
+            </div>`;
         li.innerHTML = todoItems;
         listItems.appendChild(li);
 
-        if (!todo) {
-            todo = [];
-        }
         let itemList = { item: todoValue.value, status: false };
         todo.push(itemList);
         setLocalStorage();
@@ -59,23 +56,23 @@ addUpdate.addEventListener('click', CreateToDoItems);
 function ReadToDoItems() {
     todo.forEach((element) => {
         let li = document.createElement('li');
-        let style = "";
-        if (element.status) {
-            style = "text-decoration: line-through";
-        }
+        const style = element.status ? "text-decoration: line-through" : "";
+        const checkIcon = element.status ? "images/check.png" : "images/square.png";
+
         const todoItems = `
-            <div title="Hit Double Click and Complete" ondblclick="CompletedToDoItems(this)" style="${style}">
-                ${element.item} 
-                ${style === "" ? "" : `<img class="todo-controls" src="images/check.png" />`}
+            <div>
+                <img class="check todo-controls" onclick="CompletedToDoItems(this)" src="${checkIcon}" />
+                <span style="${style}">${element.item}</span>
             </div>
             <div>
-                ${style === "" ? `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />` : ""}
+                ${!element.status ? `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />` : ""}
                 <img class="delete todo-controls" onclick="DeleteToDoItems(this)" src="images/bin.png" />
             </div>`;
         li.innerHTML = todoItems;
         listItems.appendChild(li);
     });
 }
+
 
 ReadToDoItems();
 
@@ -138,25 +135,42 @@ function DeleteToDoItems(e) {
 }
 
 function CompletedToDoItems(e) {
-    if (e.parentElement.querySelector("div").style.textDecoration === "") {
-        const img = document.createElement("img");
-        img.src = "images/check.png";
-        img.className = "todo-controls";
-        e.parentElement.querySelector("div").style.textDecoration = "line-through";
-        e.parentElement.querySelector("div").appendChild(img);
-        e.parentElement.querySelector("img.edit").remove();
+    const todoItemDiv = e.parentElement;
+    const todoTextSpan = todoItemDiv.querySelector("span");
+    const todoText = todoTextSpan.innerText.trim();
+    const isCompleted = todoTextSpan.style.textDecoration === "line-through";
 
+    if (isCompleted) {
+        // Uncheck
+        todoTextSpan.style.textDecoration = "";
+        e.src = "images/square.png";
         todo.forEach((element) => {
-            if (e.parentElement.querySelector("div").innerText.trim() == element.item) {
+            if (element.item === todoText) {
+                element.status = false;
+            }
+        });
+
+        const editHTML = `<img class="edit todo-controls" onclick="UpdateToDoItems(this)" src="images/edit.png" />`;
+        todoItemDiv.nextElementSibling.innerHTML += editHTML;
+        setAlertMessage("To Do Item Unmarked as Completed");
+    } else {
+        // Check
+        todoTextSpan.style.textDecoration = "line-through";
+        e.src = "images/check.png";
+        todo.forEach((element) => {
+            if (element.item === todoText) {
                 element.status = true;
             }
         });
 
-        setLocalStorage();
-
+        const editIcon = todoItemDiv.nextElementSibling.querySelector("img.edit");
+        if (editIcon) editIcon.remove();
         setAlertMessage("To Do Item Completed Successfully");
     }
+
+    setLocalStorage();
 }
+
 
 function setAlertMessage(message) {
     todoAlert.removeAttribute("class");
