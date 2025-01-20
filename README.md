@@ -1,7 +1,7 @@
 # To-Do
 
 ## **Overview**
-This is a personal portfolio website showcasing my skills, projects, and professional journey. The site is designed to provide an interactive and visually appealing experience for visitors, highlighting my expertise in software development.
+This is a To-Do website where you can insert all the tasks that you are planning to do and it keeps track of all tasks completed and which are not completed. You can also edit a task and delete it once you are done with it
 
 ## **Features**
 - **Add**: Add a task you wish to complete
