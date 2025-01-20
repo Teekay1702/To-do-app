@@ -46,6 +46,7 @@ function CreateToDoItems() {
         let itemList = { item: todoValue.value, status: false };
         todo.push(itemList);
         setLocalStorage();
+        updateCounters();
     }
     todoValue.value = "";
     setAlertMessage("To Do Item Added Successfully");
@@ -75,21 +76,26 @@ function ReadToDoItems() {
 
 
 ReadToDoItems();
+updateCounters();
 
 function UpdateToDoItems(e) {
-    if (e.parentElement.parentElement.querySelector("div").style.textDecoration === "") {
-        todoValue.value = e.parentElement.parentElement.querySelector("div").innerText;
-        updateText = e.parentElement.parentElement.querySelector("div");
+    const todoDiv = e.parentElement.parentElement.querySelector("div");
+    const todoTextSpan = todoDiv.querySelector("span");
+
+    if (todoTextSpan.style.textDecoration === "") {
+        todoValue.value = todoTextSpan.innerText;
+        updateText = todoTextSpan;
         addUpdate.setAttribute("onclick", "UpdateOnSelectionItems()");
         addUpdate.setAttribute("src", "images/update.png");
         todoValue.focus();
     }
 }
 
+
 function UpdateOnSelectionItems() {
     let IsPresent = false;
     todo.forEach((element) => {
-        if (element.item == todoValue.value.trim()) {
+        if (element.item === todoValue.value.trim()) {
             IsPresent = true;
         }
     });
@@ -105,6 +111,7 @@ function UpdateOnSelectionItems() {
         }
     });
     setLocalStorage();
+    updateCounters();
 
     updateText.innerText = todoValue.value.trim();
     addUpdate.setAttribute("onclick", "CreateToDoItems()");
@@ -112,6 +119,7 @@ function UpdateOnSelectionItems() {
     todoValue.value = "";
     setAlertMessage("To Do Item Updated Successfully");
 }
+
 
 function DeleteToDoItems(e) {
     let deleteValue = e.parentElement.parentElement.querySelector("div").innerText;
@@ -131,6 +139,9 @@ function DeleteToDoItems(e) {
         }, 1000);
 
         setLocalStorage();
+        updateCounters();
+
+        setAlertMessage("To Do Item Deleted Successfully");
     }
 }
 
@@ -141,7 +152,6 @@ function CompletedToDoItems(e) {
     const isCompleted = todoTextSpan.style.textDecoration === "line-through";
 
     if (isCompleted) {
-        // Uncheck
         todoTextSpan.style.textDecoration = "";
         e.src = "images/square.png";
         todo.forEach((element) => {
@@ -154,7 +164,6 @@ function CompletedToDoItems(e) {
         todoItemDiv.nextElementSibling.innerHTML += editHTML;
         setAlertMessage("To Do Item Unmarked as Completed");
     } else {
-        // Check
         todoTextSpan.style.textDecoration = "line-through";
         e.src = "images/check.png";
         todo.forEach((element) => {
@@ -169,8 +178,18 @@ function CompletedToDoItems(e) {
     }
 
     setLocalStorage();
+    updateCounters();
 }
 
+function updateCounters() {
+    const total = todo.length;
+    const completed = todo.filter(item => item.status).length;
+    const remaining = total - completed;
+
+    document.getElementById("total-count").innerText = `Total: ${total}`;
+    document.getElementById("checked-count").innerText = `Completed: ${completed}`;
+    document.getElementById("unchecked-count").innerText = `Remaining: ${remaining}`;
+}
 
 function setAlertMessage(message) {
     todoAlert.removeAttribute("class");
